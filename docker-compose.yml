@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+
+  front_end:
+    image: alpine:3.9
+    ports:
+      - "8000:80"
+    depends_on:
+      - data_server
+    restart: unless-stopped
+
+  manager:
+    image: alpine:3.9
+    ports:
+      - "8001:80"
+    depends_on:
+      - data_server
+      - queue
+
+  ingester:
+    image: ruby:2.6
+    depends_on:
+      - data_server
+      - queue
+      - worker
+
+  worker:
+    image: alpine:3.9
+
+  data_server:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - database
+    env_file:
+      - .env/development/database
+      - .env/development/data_server
+    restart: on-failure
+
+  database:
+    image: postgres:10
+    env_file:
+      - .env/development/database
+    restart: on-failure
+
+  queue:
+    image: redis:5-alpine
+    restart: on-failure

@@ -1,0 +1,3 @@
+POSTGRES_USER=teneo
+POSTGRES_PASSWORD=teneo_secret
+POSTGRES_DB=teneo
