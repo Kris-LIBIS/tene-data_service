@@ -24,3 +24,7 @@
 
 # Ignore IntelliJ project files
 .idea/*
+
+/tmp
+/log
+Gemfile.lock
